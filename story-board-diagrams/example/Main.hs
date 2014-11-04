@@ -49,15 +49,18 @@ slide2 = do
 
       let t = SB.drawTile (200,200) (pic # applyAll [connectOutside' arrowOpts (0 :: Int) (1 :: Int)])
           pic :: Diagram B R2
-          pic = oval ||| (r <> (c1 === strutY 1 === c0)) ||| hrule 1 ||| (hrule gw === grid === hrule gw)
+          pic = oval ||| (r <> (c1 === strutY 1 === c0)) ||| hrule 1 # lc orange ||| ruleAround (showOrigin $ centerX grid) ||| (strutX 1 ||| text "⇒ \x22b8" ||| strutX 1)  # ruleAround
           r = square 3
-          c = circle 0.2 # fc red
+          c = circle 0.2 # fc blue
           c0 = c # named (0 :: Int)
           c1 = c # named (1 :: Int)
-          grid :: Diagram B R2
+
+          ruleAround :: Diagram B R2 -> Diagram B R2
+          ruleAround d = r === d === r
+             where r = hrule w
+                   w = width d
+
           grid = position [(p2(x, y), c) | x <- [0 .. 5], y <- [0 .. 2]]
-          gw :: Double
-          gw = width grid
           oval = a ||| centerY (hrule 1 === strutY 2 === hrule 1) ||| rotateBy (1/2) a
             where start = 1/4 @@ turn
                   end = 3/4 @@ turn
